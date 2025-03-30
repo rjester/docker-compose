@@ -1,5 +1,9 @@
 version: "3.8"
 
+secrets:
+  cloudflare-api:
+    file: ${DOCKERDIR}/cloudflare-api.key
+
 services:
   traefik:
     image: docker.io/library/traefik:v3.3.4
@@ -19,6 +23,14 @@ services:
     networks:
       - frontend
     restart: unless-stopped
+
+  whoami:
+    image: "traefik/whoami"
+    container_name: "simple-service"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
+      - "traefik.http.routers.whoami.entrypoints=web"
 
 networks:
   frontend:
