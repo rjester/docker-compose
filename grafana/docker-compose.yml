@@ -1,0 +1,22 @@
+services:
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: grafana
+    restart: unless-stopped
+    environment:
+     - GF_PLUGINS_PREINSTALL=grafana-clock-panel
+    ports:
+     - '3000:3000'
+    volumes:
+     - /docker/grafana:/var/lib/grafana
+    labels:
+     - homepage.group=Analytics
+     - homepage.name=Grafana
+     - homepage.icon=grafana.png
+     - homepage.href=https://grafana.rjester.us/
+     - homepage.description=Grafana
+     - traefik.enable=true
+     - traefik.http.routers.grafana.rule=Host(`grafana.rjester.us`)
+     - traefik.http.routers.grafana.entrypoints=https
+     - traefik.http.routers.grafana.tls=true
+     - traefik.http.services.grafana.loadbalancer.server.port=3000
