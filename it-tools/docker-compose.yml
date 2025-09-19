@@ -5,9 +5,9 @@ services:
     ports:
       - '8088:80'
     image: 'corentinth/it-tools:latest'
-labels:
-  - traefik.enable=true
-  - traefik.http.routers.homepage.rule=Host(`it-tools.rjester.us`)
-  - traefik.http.routers.homepage.entrypoints=websecure
-  - traefik.http.routers.homepage.tls=true
-  - traefik.http.services.homepage.loadbalancer.server.port=8088
+#labels:
+#  - traefik.enable=true
+#  - traefik.http.routers.homepage.rule=Host(`it-tools.rjester.us`)
+#  - traefik.http.routers.homepage.entrypoints=websecure
+#  - traefik.http.routers.homepage.tls=true
+#  - traefik.http.services.homepage.loadbalancer.server.port=8088
