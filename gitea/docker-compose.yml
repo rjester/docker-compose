@@ -1,7 +1,5 @@
-version: "3.9"
-
 networks:
-  gitea:
+  proxy:
     external: false
 
 services:
@@ -22,9 +20,9 @@ services:
      - traefik.http.routers.gitea.rule=Host(`git.rjester.us`)
      - traefik.http.routers.gitea.entrypoints=https
      - traefik.http.routers.gitea.tls=true
-     - traefik.http.services.gitea.loadbalancer.server.port=3000
+     - traefik.http.services.gitea.loadbalancer.server.port=8091
     networks:
-      - gitea
+      - proxy
     volumes:
       - /docker/gitea/gitea_data:/data
       - /etc/timezone:/etc/timezone:ro
@@ -43,7 +41,7 @@ services:
       - POSTGRES_PASSWORD=gitea
       - POSTGRES_DB=gitea
     networks:
-      - gitea
+      - proxy
     volumes:
       - /docker/gitea//gitea_db_data:/var/lib/postgresql/data
 
