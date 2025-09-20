@@ -6,6 +6,8 @@ services:
     container_name: grafana
     ports:
       - "3000:3000"
+    networks:
+      - proxy
     volumes:
       - /docker/grafana:/var/lib/grafana
     environment:
@@ -23,5 +25,7 @@ services:
      - traefik.http.routers.grafana.entrypoints=https
      - traefik.http.routers.grafana.tls=true
      - traefik.http.services.grafana.loadbalancer.server.port=3000
-
+networks:
+  proxy:
+    external: true
   
