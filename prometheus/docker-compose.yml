@@ -1,0 +1,30 @@
+services:
+  prometheus:
+    image: docker.io/prom/prometheus:latest
+    container_name: prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yaml
+      - --storage.tsdb.retention.time=7d
+      - --storage.tsdb.retention.size=2GB
+    ports:
+      - 9090:9090
+    networks:
+      - proxy
+    volumes:
+      - /docker/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yaml:ro
+      - /docker/prometheus:/prometheus
+    restart: unless-stopped
+    labels:
+     - homepage.group=Analytics
+     - homepage.name=Prometheus
+     - homepage.icon=prometheus.png
+     - homepage.href=https://prometheus.rjester.us/
+     - homepage.description=Prometheus
+     - traefik.enable=true
+     - traefik.http.routers.prometheus.rule=Host(`prometheus.rjester.us`)
+     - traefik.http.routers.prometheus.entrypoints=https
+     - traefik.http.routers.prometheus.tls=true
+     - traefik.http.services.prometheus.loadbalancer.server.port=3000
+networks:
+  proxy:
+    external: true
