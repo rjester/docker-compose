@@ -20,7 +20,7 @@ services:
     networks:
       - gitea
     volumes:
-      - ${DOCKERDIR}/gitea/gitea_data:/data
+      - /docker/gitea/gitea_data:/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
@@ -39,7 +39,7 @@ services:
     networks:
       - gitea
     volumes:
-      - ${DOCKERDIR}/gitea//gitea_db_data:/var/lib/postgresql/data
+      - /docker/gitea//gitea_db_data:/var/lib/postgresql/data
 
 volumes:
   gitea_db_data:
