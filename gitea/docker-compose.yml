@@ -1,6 +1,6 @@
 networks:
   proxy:
-    external: false
+    external: true
 
 services:
   server:
