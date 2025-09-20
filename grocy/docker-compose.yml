@@ -7,6 +7,8 @@ services:
       - TZ=America/New_York
     ports:
       - '9283:80'
+    networks:
+      - proxy
     volumes:
       - '/docker/grocy/config:/config'
     restart: unless-stopped
@@ -17,3 +19,7 @@ services:
      - traefik.http.routers.grafana.entrypoints=https
      - traefik.http.routers.grafana.tls=true
      - traefik.http.services.grafana.loadbalancer.server.port=80
+networks:
+  proxy:
+    external: true
+       
