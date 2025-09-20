@@ -4,7 +4,7 @@ networks:
 
 services:
   server:
-    image: docker.gitea.com/gitea:1.23.6
+    image: docker.gitea.com/gitea:1.24.6
     container_name: gitea
     environment:
       - USER_UID=1000
