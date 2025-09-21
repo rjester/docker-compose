@@ -29,7 +29,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
     ports:
       - "8091:3000"
- #     - "222:22"
+      - "222:22"
     depends_on:
       - db
 
