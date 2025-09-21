@@ -15,10 +15,10 @@ services:
     image: 'lscr.io/linuxserver/grocy:latest'
     labels:
      - traefik.enable=true
-     - traefik.http.routers.grafana.rule=Host(`grocy.rjester.us`)
-     - traefik.http.routers.grafana.entrypoints=https
-     - traefik.http.routers.grafana.tls=true
-     #- traefik.http.services.grafana.loadbalancer.server.port=9283
+     - traefik.http.routers.grocy.rule=Host(`grocy.rjester.us`)
+     - traefik.http.routers.grocy.entrypoints=https
+     - traefik.http.routers.grocy.tls=true
+     #- traefik.http.services.grocy.loadbalancer.server.port=9283
 networks:
   proxy:
     external: true
