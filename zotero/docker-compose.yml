@@ -14,6 +14,8 @@ services:
     ports:
       - 3000:3000
       - 3001:3001
+    networks:
+      - proxy
     shm_size: "1gb"
     restart: unless-stopped
     labels:
@@ -21,4 +23,7 @@ services:
      - traefik.http.routers.zotero.rule=Host(`zotero.rjester.us`)
      - traefik.http.routers.zotero.entrypoints=https
      - traefik.http.routers.zotero.tls=true
-     #- traefik.http.services.zoteeo.loadbalancer.server.port=9283
+     #- traefik.http.services.zotero.loadbalancer.server.port=9283
+networks:
+  proxy:
+    external: true     
