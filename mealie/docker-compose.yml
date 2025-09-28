@@ -1,5 +1,5 @@
 services:
-  mealie:
+  mealie-sqlite:
     image: ghcr.io/mealie-recipes/mealie:v3.3.0 # 
     container_name: mealie
     restart: unless-stopped
