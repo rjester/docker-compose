@@ -1,7 +1,7 @@
 services:
-  mealie-sqlite:
+  mealie:
     image: ghcr.io/mealie-recipes/mealie:v3.3.0 # 
-    container_name: mealie
+    container_name: mealie-sqlite
     restart: unless-stopped
     ports:
         - "9925:9000" # 
@@ -18,7 +18,7 @@ services:
       ALLOW_SIGNUP: "true"
       PUID: 1000
       PGID: 1000
-      TZ: America/Anchorage
+      TZ: America/NewYork
       BASE_URL: https://recipes.rjester.us
     labels:
      - traefik.enable=true
