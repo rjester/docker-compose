@@ -5,7 +5,7 @@ services:
     environment:
       - SECRET_KEY=your_secure_secret_key    # Required: Set a secure secret key
       - USERNAME=admin                       # username
-      - PASSWORD=secure_password             # password
+      - PASSWORD=d0pp3lg4ng3r             # password
     ports:
       - "3420:8000"
     volumes:
