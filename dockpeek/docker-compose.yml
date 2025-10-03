@@ -11,3 +11,10 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
+    labels:
+     - traefik.enable=true
+     - traefik.http.routers.dockpeek.rule=Host(`dockpeek.rjester.us`)
+     - traefik.http.routers.dockpeek.entrypoints=https
+     - traefik.http.routers.dockpeek.tls=true
+    networks:
+      - proxy
