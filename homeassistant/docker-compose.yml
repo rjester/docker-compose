@@ -19,5 +19,4 @@ services:
      - traefik.http.routers.ha.rule=Host(`ha.rjester.us`)
      - traefik.http.routers.ha.entrypoints=https
      - traefik.http.routers.ha.tls=true
-    networks:
-      - host
+    network_mode: host
