@@ -8,3 +8,8 @@ services:
             - 'ADGUARD_PASSWORDS=$PASSWORD1,$PASSWORD2'
             - 'ADGUARD_USERNAMES=$USERNAME1,$USERNAME2'
             - 'ADGUARD_SERVERS=http://192.168.0.74,https://adguard-secondary.rjester.us'
+        labels:
+          - traefik.enable=true
+          - traefik.http.routers.ha.rule=Host(`adguard-exporter.rjester.us`)
+          #- traefik.http.routers.ha.entrypoints=https
+          #- traefik.http.routers.ha.tls=true
