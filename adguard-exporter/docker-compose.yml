@@ -14,7 +14,7 @@ services:
             - 'ADGUARD_USERNAMES=$USERNAME1,$USERNAME2'
             - 'ADGUARD_SERVERS=http://192.168.0.74,https://adguard-secondary.rjester.us'
         labels:
-          - traefik.enable=true
-          - traefik.http.routers.adguard-exporter.rule=Host(`adguard-exporter.rjester.us`)
+          #- traefik.enable=true
+          #- traefik.http.routers.adguard-exporter.rule=Host(`adguard-exporter.rjester.us`)
           #- traefik.http.routers.adguard-exporter.entrypoints=https
           #- traefik.http.routers.adguard-exporter.tls=true
