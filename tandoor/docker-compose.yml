@@ -1,0 +1,36 @@
+services:
+  db_recipes:
+    restart: always
+    image: postgres:16-alpine
+    volumes:
+      - /docker/tandoor/postgresql:/var/lib/postgresql/data
+    env_file:
+      - ./.env
+    networks:
+      - proxy
+
+  web_recipes:
+    restart: always
+    image: vabene1111/recipes
+    ports:
+      - "8100:80"
+    env_file:
+      - ./.env
+    volumes:
+      - /docker/tandoor/staticfiles:/opt/recipes/staticfiles
+      - /docker/tandoor/mediafiles:/opt/recipes/mediafiles
+    depends_on:
+      - db_recipes
+    labels: # traefik example labels
+      - traefik.enable=true
+      - traefik.http.routers.tandoor.rule=Host(`tandoor.rjester.us`)
+      - traefik.http.routers.tandoor.entrypoints=https
+      - traefik.http.routers.tandoor.tls=true
+#      - traefik.http.services.tandoor.loadbalancer.server.port=3000
+    networks:
+      - proxy
+
+
+networks:
+  proxy: # This is your external traefik network
+    external: true
