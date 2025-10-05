@@ -4,8 +4,6 @@ services:
     image: postgres:16-alpine
     volumes:
       - /docker/tandoor/postgresql:/var/lib/postgresql/data
-    env_file:
-      - ./.env
     networks:
       - proxy
 
@@ -14,8 +12,6 @@ services:
     image: vabene1111/recipes
     ports:
       - "8100:80"
-    env_file:
-      - ./.env
     volumes:
       - /docker/tandoor/staticfiles:/opt/recipes/staticfiles
       - /docker/tandoor/mediafiles:/opt/recipes/mediafiles
