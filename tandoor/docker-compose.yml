@@ -4,6 +4,8 @@ services:
     image: postgres:16-alpine
     volumes:
       - /docker/tandoor/postgresql:/var/lib/postgresql/data
+    env_file:
+      - ./.env
     networks:
       - proxy
 
@@ -15,6 +17,8 @@ services:
     volumes:
       - /docker/tandoor/staticfiles:/opt/recipes/staticfiles
       - /docker/tandoor/mediafiles:/opt/recipes/mediafiles
+    env_file:
+      - ./.env
     depends_on:
       - db_recipes
     labels: # traefik example labels
