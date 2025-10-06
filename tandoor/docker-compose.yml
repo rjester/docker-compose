@@ -5,7 +5,7 @@ services:
     volumes:
       - /docker/tandoor/postgresql:/var/lib/postgresql/data
     env_file:
-      - ./.env
+      - /docker/tandoor/.env
     networks:
       - proxy
 
@@ -18,7 +18,7 @@ services:
       - /docker/tandoor/staticfiles:/opt/recipes/staticfiles
       - /docker/tandoor/mediafiles:/opt/recipes/mediafiles
     env_file:
-      - ./.env
+      - /docker/tandoor/.env
     depends_on:
       - db_recipes
     labels: # traefik example labels
