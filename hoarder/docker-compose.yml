@@ -9,7 +9,7 @@ services:
     ports:
       - 8915:3000
     env_file:
-      - .env
+      - /docker/hoarder/.env
     environment:
       MEILI_ADDR: http://meilisearch:7700
       BROWSER_WEB_URL: http://chrome:9222
@@ -32,7 +32,7 @@ services:
     image: getmeili/meilisearch:v1.13.3
     restart: unless-stopped
     env_file:
-      - .env
+      - /docker/hoarder/.env
     environment:
       MEILI_NO_ANALYTICS: "true"
     volumes:
