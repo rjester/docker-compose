@@ -36,4 +36,4 @@ services:
     environment:
       MEILI_NO_ANALYTICS: "true"
     volumes:
-      - meilisearch:/meili_data
+      - /docker/meilisearch:/meili_data
