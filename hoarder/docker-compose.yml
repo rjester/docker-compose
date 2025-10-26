@@ -12,7 +12,10 @@ services:
       MEILI_ADDR: http://meilisearch:7700
       BROWSER_WEB_URL: http://chrome:9222
       # OPENAI_API_KEY: ...
-
+      HOARDER_VERSION: latest
+      NEXTAUTH_SECRET: 2fjLEIJKKl016/nJmlZnp2UpvaFCccwMkVan1ufigxqsuOtD
+      MEILI_MASTER_KEY: tZcjeGqwy8DEu7GqxbBupvLexsSSEit7FchT4WnAmi0ewxPb
+      NEXTAUTH_URL: http://localhost:3000
       # You almost never want to change the value of the DATA_DIR variable.
       # If you want to mount a custom directory, change the volume mapping above instead.
       DATA_DIR: /data # DON'T CHANGE THIS
