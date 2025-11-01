@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     environment:
       # Optional: put your config options customization here. Examples:
-      # ND_LOGLEVEL: debug
+      ND_LOGLEVEL: debug
     volumes:
       - "/docker/navidrome/data:/data"
       - "/docker/navidrome/music:/music:ro"
