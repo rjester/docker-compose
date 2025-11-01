@@ -1,0 +1,38 @@
+services:
+  web:
+    image: ghcr.io/karakeep-app/karakeep:${KARAKEEP_VERSION:-release}
+    restart: unless-stopped
+    volumes:
+      # By default, the data is stored in a docker volume called "data".
+      # If you want to mount a custom directory, change the volume mapping to:
+      - /docker/hoarder:/data
+    ports:
+      - 8915:3000
+    environment:
+      MEILI_ADDR: http://meilisearch:7700
+      BROWSER_WEB_URL: http://chrome:9222
+      # OPENAI_API_KEY: ...
+      HOARDER_VERSION: latest
+      NEXTAUTH_SECRET: 2fjLEIJKKl016/nJmlZnp2UpvaFCccwMkVan1ufigxqsuOtD
+      MEILI_MASTER_KEY: tZcjeGqwy8DEu7GqxbBupvLexsSSEit7FchT4WnAmi0ewxPb
+      NEXTAUTH_URL: http://localhost:3000
+      # You almost never want to change the value of the DATA_DIR variable.
+      # If you want to mount a custom directory, change the volume mapping above instead.
+      DATA_DIR: /data # DON'T CHANGE THIS
+  chrome:
+    image: gcr.io/zenika-hub/alpine-chrome:124
+    restart: unless-stopped
+    command:
+      - --no-sandbox
+      - --disable-gpu
+      - --disable-dev-shm-usage
+      - --remote-debugging-address=0.0.0.0
+      - --remote-debugging-port=9222
+      - --hide-scrollbars
+  meilisearch:
+    image: getmeili/meilisearch:v1.13.3
+    restart: unless-stopped
+    environment:
+      MEILI_NO_ANALYTICS: "true"
+    volumes:
+      - /docker/meilisearch:/meili_data
