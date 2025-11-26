@@ -4,31 +4,19 @@ services:
     image: postgres:16-alpine
     volumes:
       - /docker/tandoor/postgresql:/var/lib/postgresql/data
-    #env_file:
-    #  - /docker/tandoor/.env
-    environment:
-      SECRET_KEY: "9rcMgQgqGHFoMyNCkZCLU2Y17Rvqv9v7UfslQnMSOutQXuKXY9"
-      TZ: "America/New_York"
-      DB_ENGINE: "django.db.backends.postgresql"
-      POSTGRES_HOST: "db_recipes"
-      POSTGRES_DB: "djangodb"
-      POSTGRES_PORT: 5432
-      POSTGRES_USER: "djangouser"
-      POSTGRES_PASSWORD: "d0pp3lg4ng3r"
-      POSTGRES_HOST_AUTH_METHOD: "trust"
+    env_file:
+      - /docker/tandoor/.env
     networks:
-      - proxy
+      - default
 
   web_recipes:
     restart: always
     image: vabene1111/recipes
-    ports:
-      - "8101:80"
+    env_file:
+      - ./.env
     volumes:
       - /docker/tandoor/staticfiles:/opt/recipes/staticfiles
-      - /docker/tandoor/mediafiles:/opt/recipes/mediafiles
-    #env_file:
-    #  - /docker/tandoor/.env
+      - /docker/tandoor//mediafiles:/opt/recipes/mediafiles
     depends_on:
       - db_recipes
     labels: # traefik example labels
@@ -36,11 +24,12 @@ services:
       - traefik.http.routers.tandoor.rule=Host(`tandoor.rjester.us`)
       - traefik.http.routers.tandoor.entrypoints=https
       - traefik.http.routers.tandoor.tls=true
-#      - traefik.http.services.tandoor.loadbalancer.server.port=3000
     networks:
+      - default
       - proxy
 
 
 networks:
+  default:
   proxy: # This is your external traefik network
     external: true
