@@ -6,6 +6,16 @@ services:
       - /docker/tandoor/postgresql:/var/lib/postgresql/data
     #env_file:
     #  - /docker/tandoor/.env
+    environment:
+      SECRET_KEY: "9rcMgQgqGHFoMyNCkZCLU2Y17Rvqv9v7UfslQnMSOutQXuKXY9"
+      TZ: "America/New_York"
+      DB_ENGINE: "django.db.backends.postgresql"
+      POSTGRES_HOST: "db_recipes"
+      POSTGRES_DB: "djangodb"
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: "djangouser"
+      POSTGRES_PASSWORD: "d0pp3lg4ng3r"
+      POSTGRES_HOST_AUTH_METHOD: "trust"
     networks:
       - proxy
 
