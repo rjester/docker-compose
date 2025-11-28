@@ -61,6 +61,7 @@ services:
       - traefik.http.routers.pgadmin.rule=(Host(`pgadmin.tandoor.rjester.us`) && PathPrefix(`/_admin/pgadmin`))
       - traefik.http.services.pgadmin.loadbalancer.server.port=80
       - traefik.http.middlewares.pgadmin-stripprefix.stripprefix.prefixes=/_admin/pgadmin
+      - traefik.http.routers.pgadmin.service=pgadmin
       - traefik.http.routers.pgadmin.middlewares=pgadmin-stripprefix
       
       
