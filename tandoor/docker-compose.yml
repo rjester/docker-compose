@@ -23,16 +23,16 @@ services:
     restart: always
     image: vabene1111/recipes
     env_file:
-      - ./.env
+      - /docker/tandoor/.env
     volumes:
       - /docker/tandoor/staticfiles:/opt/recipes/staticfiles
-      - /docker/tandoor//mediafiles:/opt/recipes/mediafiles
+      - /docker/tandoor/mediafiles:/opt/recipes/mediafiles
     depends_on:
       - db_recipes
-    labels: # traefik example labels
+    labels: 
       - traefik.enable=true
       - traefik.http.routers.tandoor.rule=Host(`tandoor.rjester.us`)
-      - traefik.http.routers.tandoor.entrypoints=https
+      - traefik.http.routers.tandoor.entrypoints=websecure
       - traefik.http.routers.tandoor.tls=true
     networks:
       - proxy
@@ -44,7 +44,7 @@ services:
       db_recipes:
         condition: service_healthy
     volumes:
-      - ./pgadmin-data:/var/lib/pgadmin
+      - /docker/tandoor/pgadmin:/var/lib/pgadmin
     ports:
       - 5050:80
     environment:
@@ -56,12 +56,14 @@ services:
       - proxy
     labels:
       - traefik.enable=true
-      - traefik.http.routers.pgadmin.entrypoints=https
-      - traefik.http.routers.pgadmin.service=pgadmin
-      - traefik.http.services.pgadmin.loadbalancer.server.port=5050 #80
-      #- traefik.http.routers.pgadmin.rule=(Host(`localhost`) && PathPrefix(`/_admin/pgadmin`))
-      - traefik.http.routers.pgadmin.rule=(Host(`pgadmin.tandoor.rjester.us`) && PathPrefix(`/_admin/pgadmin`))
+      - traefik.http.routers.pgadmin.entrypoints=websecure
       - traefik.http.routers.tandoor.tls=true
+      - traefik.http.routers.pgadmin.rule=(Host(`pgadmin.tandoor.rjester.us`) && PathPrefix(`/_admin/pgadmin`))
+      - traefik.http.services.pgadmin.loadbalancer.server.port=80
+      - traefik.http.middlewares.pgadmin-stripprefix.stripprefix.prefixes=/_admin/pgadmin
+      - traefik.http.routers.pgadmin.middlewares=pgadmin-stripprefix
+      
+      
 
 networks:
   proxy:
