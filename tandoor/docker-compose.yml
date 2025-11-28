@@ -32,7 +32,7 @@ services:
     labels: 
       - traefik.enable=true
       - traefik.http.routers.tandoor.rule=Host(`tandoor.rjester.us`)
-      - traefik.http.routers.tandoor.entrypoints=websecure
+      - traefik.http.routers.tandoor.entrypoints=https
       - traefik.http.routers.tandoor.tls=true
     networks:
       - proxy
@@ -56,7 +56,7 @@ services:
       - proxy
     labels:
       - traefik.enable=true
-      - traefik.http.routers.pgadmin.entrypoints=websecure
+      - traefik.http.routers.pgadmin.entrypoints=https
       - traefik.http.routers.tandoor.tls=true
       - traefik.http.routers.pgadmin.rule=(Host(`pgadmin.tandoor.rjester.us`) && PathPrefix(`/_admin/pgadmin`))
       - traefik.http.services.pgadmin.loadbalancer.server.port=80
