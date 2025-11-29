@@ -19,7 +19,7 @@ services:
       retries: 50
       start_period: 30s
 
-  web_recipes:
+  webrecipes:
     restart: always
     image: vabene1111/recipes
     env_file:
@@ -34,7 +34,7 @@ services:
       - traefik.http.routers.tandoor.rule=Host(`tandoor.rjester.us`)
       - traefik.http.routers.tandoor.entrypoints=https
       - traefik.http.routers.tandoor.tls=true
-      - traefik.http.routers.pgadmin.tls.certResolver=cloudflare
+      - traefik.http.routers.tandoor.tls.certResolver=cloudflare
     networks:
       - proxy
 
@@ -51,7 +51,8 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: rjester@gmail.com
       PGADMIN_DEFAULT_PASSWORD: 123456
-      SCRIPT_NAME: /_admin/pgadmin
+      # Serve pgAdmin at the host root; do not set SCRIPT_NAME when
+      # Traefik isn't forwarding the subpath to the container.
     networks:
 #      - default
       - proxy
@@ -59,11 +60,9 @@ services:
       - traefik.enable=true
       - traefik.http.routers.pgadmin.entrypoints=https
       - traefik.http.routers.pgadmin.tls=true
-      - traefik.http.routers.pgadmin.rule=(Host(`pgadmin.tandoor.rjester.us`) && PathPrefix(`/_admin/pgadmin`))
+      - traefik.http.routers.pgadmin.rule=Host(`pgadmin.rjester.us`)
       - traefik.http.services.pgadmin.loadbalancer.server.port=80
-      - traefik.http.middlewares.pgadmin-stripprefix.stripprefix.prefixes=/_admin/pgadmin
       - traefik.http.routers.pgadmin.service=pgadmin
-      - traefik.http.routers.pgadmin.middlewares=pgadmin-stripprefix
       - traefik.http.routers.pgadmin.tls.certResolver=cloudflare      
 
 networks:

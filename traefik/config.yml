@@ -1,0 +1,140 @@
+http:
+ #region routers
+  routers:
+    portainer:
+      entryPoints:
+        - "https"
+      rule: "Host(`portainer.local.solemnorangutan.com`) || Host(`portainer.local.russjester.com`) || Host(`portainer.rjester.us`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: portainer
+    adguard:
+      entryPoints:
+        - "https"
+      rule: "Host(`adguard-primary.local.solemnorangutan.com`) || Host(`adguard-primary.local.russjester.com`) || Host(`adguard-primary.rjester.us`)"
+      middlewares:
+        # - redirectregex-pihole
+        - default-headers
+        # - addprefix-pihole
+        - https-redirectscheme
+      tls: {}
+      service: adguard
+    adguard-secondary:
+      entryPoints:
+        - "https"
+      rule: "Host(`adguard-secondary.local.solemnorangutan.com`) || Host(`adguard-secondary.local.russjester.com`) || Host(`adguard-secondary.rjester.us`)"
+      middlewares:
+        # - redirectregex-pihole
+        - default-headers
+        # - addprefix-pihole
+        - https-redirectscheme
+      tls: {}
+      service: adguard-secondary
+    homeassistant:
+      # For Homeassistant config, check: https://www.home-assistant.io/integrations/http/#reverse-proxies
+      # This relies on Homeassistant using http. No certs are needed in the Homeassistant config.
+      entryPoints:
+        - "https"
+      rule: "Host(`homeassistant.local.solemnorangutan.com`) || Host(`homeassistant.local.russjester.com`) || Host(`homeassistant.rjester.us`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: homeassistant
+    jellyfin:
+      entryPoints:
+        - "https"
+      rule: "Host(`media.local.solemnorangutan.com`) || Host(`media.local.russjester.com`) || Host(`media.rjester.us`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: jellyfin
+    homepage:
+      entryPoints:
+        - "https"
+      rule: "Host(`home.local.solemnorangutan.com`) || Host(`home.local.russjester.com`) || Host(`home.rjester.us`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: homepage
+
+
+#endregion
+#region services
+  services:
+    portainer:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.0.125:9443"
+        passHostHeader: true
+    adguard:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.74:80"
+        passHostHeader: true
+    adguard-secondary:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.125:82"
+        passHostHeader: true
+    homeassistant:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.230:8123"
+        passHostHeader: true
+    jellyfin:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.125:8096"
+        passHostHeader: true
+    homepage:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.125:8089"
+        passHostHeader: true
+#endregion
+  middlewares:
+    addprefix-pihole:
+      addPrefix:
+        prefix: "/admin"
+    https-redirectscheme:
+      redirectScheme:
+        scheme: https
+        permanent: true
+    redirectregex-pihole:
+      redirectRegex:
+        regex: "/admin/(.*)"
+        replacement: /
+
+    default-headers:
+      headers:
+        frameDeny: true
+        browserXssFilter: true
+        contentTypeNosniff: true
+        forceSTSHeader: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 15552000
+        customFrameOptionsValue: SAMEORIGIN
+        customRequestHeaders:
+          X-Forwarded-Proto: https
+
+    default-whitelist:
+      ipAllowList:
+        sourceRange:
+        - "10.0.0.0/8"
+        - "192.168.0.0/16"
+        - "192.168.16.0/16"
+        - "192.168.240.0/16"
+        - "172.16.0.0/12"
+        - "172.22.0.0/12"
+
+    secured:
+      chain:
+        middlewares:
+        - default-whitelist
+        - default-headers
