@@ -1,0 +1,20 @@
+services:
+  db_recipes:
+    restart: always
+    image: postgres:16-alpine
+    volumes:
+      - /docker/tandoor/postgresql:/var/lib/postgresql/data
+    env_file:
+      - /docker/tandoor/.env
+    ports:
+      - 5432:5432
+    networks:
+      - proxy
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - psql -U djangouser -d djangodb
+      interval: 10s
+      timeout: 10s
+      retries: 50
+      start_period: 30s
