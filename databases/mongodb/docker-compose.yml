@@ -12,6 +12,7 @@ services:
     volumes:
       - /docker/mongodb/data:/data/db
       - /docker/mongodb/configdb:/data/configdb
+      - ./init.sh:/docker-entrypoint-initdb.d/init.sh:ro
     ports:
       - "27017:27017"
     healthcheck:
