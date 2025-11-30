@@ -13,15 +13,12 @@
   folder only when the database is initialized for the first time.
 */
 
+// Idempotent init script: creates app DB and user only if the user doesn't exist.
 (function() {
   if (!process.env.MONGO_INITDB_DATABASE) {
-    // nothing to do
     print('No MONGO_INITDB_DATABASE set; skipping application user creation.');
     return;
   }
-
-  const adminDB = db.getSiblingDB('admin');
-  // root user is created by the official image using MONGO_INITDB_ROOT_* vars
 
   const appDbName = process.env.MONGO_INITDB_DATABASE;
   const appUser = process.env.MONGO_INITDB_USER || 'appuser';
@@ -29,8 +26,15 @@
 
   const appDB = db.getSiblingDB(appDbName);
 
-  print('Creating application database: ' + appDbName);
+  print('Checking application database/user: ' + appDbName + ' / ' + appUser);
   try {
+    const existing = appDB.getUser(appUser);
+    if (existing) {
+      print('User exists, skipping creation.');
+      return;
+    }
+
+    print('Creating user ' + appUser + ' on ' + appDbName);
     appDB.createUser({
       user: appUser,
       pwd: appPass,
