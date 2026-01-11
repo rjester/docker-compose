@@ -1,0 +1,70 @@
+services:
+  db_recipes:
+    restart: always
+    image: postgres:16-alpine
+    volumes:
+      - /docker/tandoor/postgresql:/var/lib/postgresql/data
+    env_file:
+      - /docker/tandoor/.env
+    ports:
+      - 5432:5432
+    networks:
+      - proxy
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - psql -U djangouser -d djangodb
+      interval: 10s
+      timeout: 10s
+      retries: 50
+      start_period: 30s
+
+  webrecipes:
+    restart: always
+    image: vabene1111/recipes
+    env_file:
+      - /docker/tandoor/.env
+    volumes:
+      - /docker/tandoor/staticfiles:/opt/recipes/staticfiles
+      - /docker/tandoor/mediafiles:/opt/recipes/mediafiles
+    depends_on:
+      - db_recipes
+    labels: 
+      - traefik.enable=true
+      - traefik.http.routers.tandoor.rule=Host(`tandoor.rjester.us`)
+      - traefik.http.routers.tandoor.entrypoints=https
+      - traefik.http.routers.tandoor.tls=true
+      - traefik.http.routers.tandoor.tls.certResolver=cloudflare
+    networks:
+      - proxy
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    depends_on:
+      db_recipes:
+        condition: service_healthy
+    volumes:
+      - /docker/tandoor/pgadmin:/var/lib/pgadmin
+    #ports:
+    #  - 5050:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: rjester@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: 123456
+      # Serve pgAdmin at the host root; do not set SCRIPT_NAME when
+      # Traefik isn't forwarding the subpath to the container.
+    networks:
+#      - default
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.pgadmin.entrypoints=https
+      - traefik.http.routers.pgadmin.tls=true
+      - traefik.http.routers.pgadmin.rule=Host(`pgadmin.rjester.us`)
+      - traefik.http.services.pgadmin.loadbalancer.server.port=80
+      - traefik.http.routers.pgadmin.service=pgadmin
+      - traefik.http.routers.pgadmin.tls.certResolver=cloudflare      
+
+networks:
+  proxy:
+    external: true

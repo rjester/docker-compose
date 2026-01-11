@@ -1,0 +1,29 @@
+---
+services:
+  zotero:
+    image: lscr.io/linuxserver/zotero:latest
+    container_name: zotero
+    security_opt:
+      - seccomp:unconfined #optional
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - /docker/zotero/config:/config
+    ports:
+      - 3010:3000
+      - 3001:3001
+    networks:
+      - proxy
+    shm_size: "1gb"
+    restart: unless-stopped
+    labels:
+     - traefik.enable=true
+     - traefik.http.routers.zotero.rule=Host(`zotero.rjester.us`)
+     - traefik.http.routers.zotero.entrypoints=https
+     - traefik.http.routers.zotero.tls=true
+     #- traefik.http.services.zotero.loadbalancer.server.port=9283
+networks:
+  proxy:
+    external: true     

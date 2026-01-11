@@ -1,0 +1,25 @@
+services:
+  linuxserver:
+    container_name: grocy
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    ports:
+      - '9283:80'
+    networks:
+      - proxy
+    volumes:
+      - '/docker/grocy/config:/config'
+    restart: unless-stopped
+    image: 'lscr.io/linuxserver/grocy:latest'
+    labels:
+     - traefik.enable=true
+     - traefik.http.routers.grocy.rule=Host(`grocy.rjester.us`)
+     - traefik.http.routers.grocy.entrypoints=https
+     - traefik.http.routers.grocy.tls=true
+     #- traefik.http.services.grocy.loadbalancer.server.port=9283
+networks:
+  proxy:
+    external: true
+       

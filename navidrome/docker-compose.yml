@@ -1,0 +1,25 @@
+services:
+  navidrome:
+    image: deluan/navidrome:latest
+    user: 1000:1000 # should be owner of volumes
+    ports:
+      - "4533:4533"
+    restart: unless-stopped
+    environment:
+      # Optional: put your config options customization here. Examples:
+      ND_LOGLEVEL: debug
+    volumes:
+      - "/docker/navidrome/data:/data"
+      - "/docker/navidrome/music:/music:ro"
+    labels: # traefik example labels
+      - traefik.enable=true
+      - traefik.http.routers.navidrome.rule=Host(`music.rjester.us`)
+      - traefik.http.routers.navidrome.entrypoints=https
+      - traefik.http.routers.navidrome.tls=true
+#      - traefik.http.services.tandoor.loadbalancer.server.port=3000
+    networks:
+      - proxy
+
+networks:
+  proxy: # This is your external traefik network
+    external: true

@@ -1,0 +1,23 @@
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: ghcr.io/home-assistant/home-assistant:2025.10.1
+    volumes:
+      - /docker/homeassistant/config:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
+    # devices:
+    #   - /dev/ttyACMO  # (optional) Add serial devices to the container
+    ports:
+      - "8123:8123"
+    environment:
+      - TZ=America/New_York  # Set your timezone
+    privileged: true
+    restart: unless-stopped
+    labels:
+     - traefik.enable=true
+     - traefik.http.routers.ha.rule=Host(`ha.rjester.us`)
+     - traefik.http.routers.ha.entrypoints=https
+     - traefik.http.routers.ha.tls=true
+     - traefik.http.services.ha.loadbalancer.server.port=8123
+    network_mode: host
