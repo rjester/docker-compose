@@ -1,5 +1,4 @@
 
-
 services:
     henrywhitaker3:
         image: 'ghcr.io/henrywhitaker3/adguard-exporter:latest'
@@ -8,7 +7,7 @@ services:
         environment:
             - 'ADGUARD_PASSWORDS=$PASSWORD1,$PASSWORD2'
             - 'ADGUARD_USERNAMES=$USERNAME1,$USERNAME2'
-            - 'ADGUARD_SERVERS=http://192.168.0.74,https://adguard-secondary.rjester.us'
+            - 'ADGUARD_SERVERS=http://192.168.0.74,http://192.168.0.211'
             #- 'ADGUARD_PASSWORDS=$PASSWORD1'
             #- 'ADGUARD_USERNAMES=$USERNAME1'
             #- 'ADGUARD_SERVERS=http://192.168.0.74'
