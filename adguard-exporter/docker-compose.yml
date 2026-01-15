@@ -1,5 +1,4 @@
 
-
 services:
     henrywhitaker3:
         image: 'ghcr.io/henrywhitaker3/adguard-exporter:latest'
